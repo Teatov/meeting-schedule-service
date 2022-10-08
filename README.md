@@ -1,233 +1,496 @@
-<p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Basic Project Template</h1>
-    <br>
-</p>
-
-Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-rapidly creating small projects.
-
-The template contains the basic features including user login/logout and a contact page.
-It includes all commonly used configurations that would allow you to focus on adding new
-features to your application.
-
-[![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![build](https://github.com/yiisoft/yii2-app-basic/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-basic/actions?query=workflow%3Abuild)
-
-DIRECTORY STRUCTURE
--------------------
-
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
-
-
-
-REQUIREMENTS
-------------
-
-The minimum requirement by this project template that your Web server supports PHP 5.6.0.
-
-
-INSTALLATION
-------------
-
-### Install via Composer
-
-If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-You can then install this project template using the following command:
-
-~~~
-composer create-project --prefer-dist yiisoft/yii2-app-basic basic
-~~~
-
-Now you should be able to access the application through the following URL, assuming `basic` is the directory
-directly under the Web root.
-
-~~~
-http://localhost/basic/web/
-~~~
-
-### Install from an Archive File
-
-Extract the archive file downloaded from [yiiframework.com](http://www.yiiframework.com/download/) to
-a directory named `basic` that is directly under the Web root.
-
-Set cookie validation key in `config/web.php` file to some random secret string:
-
-```php
-'request' => [
-    // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-    'cookieValidationKey' => '<secret random string goes here>',
-],
-```
-
-You can then access the application through the following URL:
-
-~~~
-http://localhost/basic/web/
-~~~
-
-
-### Install with Docker
-
-Update your vendor packages
-
-    docker-compose run --rm php composer update --prefer-dist
-    
-Run the installation triggers (creating cookie validation code)
-
-    docker-compose run --rm php composer install    
-    
-Start the container
-
-    docker-compose up -d
-    
-You can then access the application through the following URL:
-
-    http://127.0.0.1:8000
-
-**NOTES:** 
-- Minimum required Docker engine version `17.04` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
-- The default configuration uses a host-volume in your home directory `.docker-composer` for composer caches
-
-
-CONFIGURATION
--------------
-
-### Database
-
-Edit the file `config/db.php` with real data, for example:
-
-```php
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '1234',
-    'charset' => 'utf8',
-];
-```
-
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-- Check and edit the other files in the `config/` directory to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to basic application tests.
-
-
-TESTING
--------
-
-Tests are located in `tests` directory. They are developed with [Codeception PHP Testing Framework](http://codeception.com/).
-By default, there are 3 test suites:
-
-- `unit`
-- `functional`
-- `acceptance`
-
-Tests can be executed by running
-
-```
-vendor/bin/codecept run
-```
-
-The command above will execute unit and functional tests. Unit tests are testing the system components, while functional
-tests are for testing user interaction. Acceptance tests are disabled by default as they require additional setup since
-they perform testing in real browser. 
-
-
-### Running  acceptance tests
-
-To execute acceptance tests do the following:  
-
-1. Rename `tests/acceptance.suite.yml.example` to `tests/acceptance.suite.yml` to enable suite configuration
-
-2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full-featured
-   version of Codeception
-
-3. Update dependencies with Composer 
-
-    ```
-    composer update  
-    ```
-
-4. Download [Selenium Server](http://www.seleniumhq.org/download/) and launch it:
-
-    ```
-    java -jar ~/selenium-server-standalone-x.xx.x.jar
-    ```
-
-    In case of using Selenium Server 3.0 with Firefox browser since v48 or Google Chrome since v53 you must download [GeckoDriver](https://github.com/mozilla/geckodriver/releases) or [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and launch Selenium with it:
-
-    ```
-    # for Firefox
-    java -jar -Dwebdriver.gecko.driver=~/geckodriver ~/selenium-server-standalone-3.xx.x.jar
-    
-    # for Google Chrome
-    java -jar -Dwebdriver.chrome.driver=~/chromedriver ~/selenium-server-standalone-3.xx.x.jar
-    ``` 
-    
-    As an alternative way you can use already configured Docker container with older versions of Selenium and Firefox:
-    
-    ```
-    docker run --net=host selenium/standalone-firefox:2.53.0
-    ```
-
-5. (Optional) Create `yii2basic_test` database and update it by applying migrations if you have them.
-
-   ```
-   tests/bin/yii migrate
-   ```
-
-   The database configuration can be found at `config/test_db.php`.
-
-
-6. Start web server:
-
-    ```
-    tests/bin/yii serve
-    ```
-
-7. Now you can run all available tests
-
-   ```
-   # run all available tests
-   vendor/bin/codecept run
-
-   # run acceptance tests
-   vendor/bin/codecept run acceptance
-
-   # run only unit and functional tests
-   vendor/bin/codecept run unit,functional
-   ```
-
-### Code coverage support
-
-By default, code coverage is disabled in `codeception.yml` configuration file, you should uncomment needed rows to be able
-to collect code coverage. You can run your tests and collect coverage with the following command:
-
-```
-#collect coverage for all tests
-vendor/bin/codecept run --coverage --coverage-html --coverage-xml
-
-#collect coverage only for unit tests
-vendor/bin/codecept run unit --coverage --coverage-html --coverage-xml
-
-#collect coverage for unit and functional tests
-vendor/bin/codecept run functional,unit --coverage --coverage-html --coverage-xml
-```
-
-You can see code coverage output under the `tests/_output` directory.
+<h1>API о сотрудниках, собраниях и расписаниях</h1>
+        <hr>
+
+        Основываясь на принципах REST, этот API предоставляет конечные точки для операций над сотрудниками, собраниями и
+        для
+        составления расписаний для сотрудников. <br>
+
+        <h2>Описание</h2>
+        <h5 id="description-requests">Запросы</h5>
+        Доступ к ресурсам может быть получен через стандартные HTTP запросы в формате UTF-8, отправленные к нужной
+        конечной точке.<br>
+        Для каждой операции API использует соответствующие HTTP методы:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Метод</th>
+                        <th>Операция</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp class="tag tag--info">GET</samp></td>
+                        <td>Получить ресурс</td>
+                    </tr>
+                    <tr>
+                        <td><samp class="tag tag--success">POST</samp></td>
+                        <td>Создать ресурс</td>
+                    </tr>
+                    <tr>
+                        <td><samp class="tag tag--warning">PATCH</samp></td>
+                        <td>Изменить ресурс</td>
+                    </tr>
+                    <tr>
+                        <td><samp class="tag tag--danger">DELETE</samp></td>
+                        <td>Удалить ресурс</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h5 id="description-responses">Ответы</h5>
+        Ответы содержат JSON объект. Документация конечных точек описывает типичные ответы от каждой из них.
+
+        <h5 id="description-datetime">Дата и время</h5>
+        Даты имеют формат <code>ГГГГ-ММ-ДД</code>. Время имеет формат <code>ЧЧ:ММ:СС</code> или <code>ЧЧ:ММ</code>.
+
+        <h5 id="description-pagination">Постраничная навигация</h5>
+        Конечные точки, возвращающие коллекции ресурсов, автоматически разбиваются на страницы.<br>
+        Одна страница содержит 20 ресурсов. Нумерация страниц начинается с 1.<br>
+        Можно выбирать страницу, добавляя параметр запроса <code>page</code>:
+        <pre><code>http://meetings.test/v1/appointments?page=2</code></pre>
+        Информация о пагинации включена в HTTP ответ в следующих заголовках:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Заголовок</th>
+                        <th>Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp>X-Pagination-Total-Count</samp></td>
+                        <td>Общее количество ресурсов</td>
+                    </tr>
+                    <tr>
+                        <td><samp>X-Pagination-Page-Count</samp></td>
+                        <td>Количество страниц</td>
+                    </tr>
+                    <tr>
+                        <td><samp>X-Pagination-Current-Page</samp></td>
+                        <td>Номер текущей страницы</td>
+                    </tr>
+                    <tr>
+                        <td><samp>X-Pagination-Per-Page</samp></td>
+                        <td>Количество ресурсов на одну страницу</td>
+                    </tr>
+                    <tr>
+                        <td><samp>Link</samp></td>
+                        <td>Список навигационных ссылок для всех страниц</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+
+        <h2>Быстрый старт</h2>
+        <h5 id="quickstart-setup">Установка</h5>
+        <ol>
+            <li>Откройте командную строку в папке приложения и запустите следующую команду, чтобы установить необходимые
+                расширения:
+                <pre><code>composer install</code></pre>
+                Затем запустите следующую команду, чтобы проверить требования:
+                <pre><code>php requirements.php</code></pre>
+            </li>
+            <li>Откройте файл <code>config/db.php</code> и измените параметры на верные для вашей базы данных.<br>
+                По умолчанию этот файл содержит следующее:
+                <pre><code>&lt;?php
+
+    return [
+        &apos;class&apos; =&gt; &apos;yii\db\Connection&apos;,
+        &apos;dsn&apos; =&gt; &apos;mysql:host=127.0.0.1;dbname=meeting_schedule_service&apos;,
+        &apos;username&apos; =&gt; &apos;root&apos;,
+        &apos;password&apos; =&gt; &apos;&apos;,
+        &apos;charset&apos; =&gt; &apos;utf8&apos;,
+    ];</code></pre>
+            </li>
+            <li>Подключите приложение к вашему серверу Apache или Nginx.<br>
+                Создайте для него виртуальный хост с именем
+                <code>meetings.test</code>.
+            </li>
+            <li>Запустите сервер и проверьте подключение, открыв адрес <code>http://meetings.test/</code></li>
+        </ol>
+        <hr>
+
+        <h2>Ресурсы</h2>
+
+        <h5 id="resources-employees">Сотрудники</h5>
+        Каждый сотрудник имеет имя и должность.<br>
+        С каждым сотрудником связаны собрания, на которые он назначен.<br>
+        Для каждого сотрудника можно составить расписание на указанный день, при котором он сможет посетить максимальное количество собраний.<br>
+        <br>
+        Структура:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Тип данных</th>
+                        <th>Описание</th>
+                        <th>Правила</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp>id</samp></td>
+                        <td><samp>int</samp></td>
+                        <td>ID сотрудника.</td>
+                        <td>Заполняется автоматически.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>name</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Полное имя сотрудника.</td>
+                        <td>Обязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>title</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Должность сотрудника.</td>
+                        <td>Необязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>meetings</samp></td>
+                        <td><samp>array</samp></td>
+                        <td>Список собраний, на которые назначен сотрудник.</td>
+                        <td>По умолчанию скрыто.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h5 id="resources-meetings">Собрания</h5>
+        Каждое собрание имеет дату, время начала, время конца и тему.<br>
+        С каждым собранием связаны сотрудники, которые на него назначены.<br>
+        <br>
+        Структура:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Тип данных</th>
+                        <th>Описание</th>
+                        <th>Правила</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp>id</samp></td>
+                        <td><samp>int</samp></td>
+                        <td>ID собрания.</td>
+                        <td>Заполняется автоматически.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>date</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Дата собрания.</td>
+                        <td>Обязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>start_time</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Время начала собрания.</td>
+                        <td>Обязательно. Не может быть позже конца.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>end_time</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Время конца собрания.</td>
+                        <td>Обязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>topic</samp></td>
+                        <td><samp>string</samp></td>
+                        <td>Тема собрания.</td>
+                        <td>Необязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>employees</samp></td>
+                        <td><samp>array</samp></td>
+                        <td>Список сотрудников, которые назначены на собрание.</td>
+                        <td>По умолчанию скрыто.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h5 id="resources-appointments">Связи между сотрудниками и собраниями</h5>
+        Связующие звенья между сотрудниками и собраниями.<br>
+        Каждая связь соединяет одного сотрудника и одно собрание.<br>
+        Один сотрудник может быть связан со многими собраниями, а собрание - со многими сотрудниками.<br>
+        <br>
+        Структура:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Тип данных</th>
+                        <th>Описание</th>
+                        <th>Правила</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp>meeting_id</samp></td>
+                        <td><samp>int</samp></td>
+                        <td>ID собрания.</td>
+                        <td>Обязательно.</td>
+                    </tr>
+                    <tr>
+                        <td><samp>employee_id</samp></td>
+                        <td><samp>int</samp></td>
+                        <td>ID сотрудника.</td>
+                        <td>Обязательно.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <h2>Конечные точки</h2>
+        Базовый адрес для всех запросов - <code>http://meetings.test/v1</code>.
+
+        <h5>Параметры запроса</h5>
+        К каждому запросу можно добавить параметры для пагинации, фильтрации и сортировки коллекций, а также для скрытия
+        и
+        добавления полей ресурсов:
+        <div class="table-container">
+            <table class="table small">
+                <thead>
+                    <tr>
+                        <th>Параметр</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><samp>page</samp></td>
+                        <td>Переносит на заданную страницу.</td>
+                        <td><code>http://meetings.test/v1/appointments?page=3</code></td>
+                    </tr>
+                    <tr>
+                        <td><samp>filter[{field}][{control}]</samp></td>
+                        <td>Фильтрует коллекцию и возвращает только те ресурсы,
+                            <br>в которых поля соответствуют условию.<br>
+                            По умолчанию проверяет на равенство, но можно<br>
+                            указать другие операторы в {control}. (<a
+                                href="https://www.yiiframework.com/doc/api/2.0/yii-data-datafilter#$filterControls-detail">Доступные
+                                операторы</a>)
+                        </td>
+                        <td><code>http://meetings.test/v1/meetings?filter[start_time]=03:00:00</code><br>
+                            <code>http://meetings.test/v1/appointments?filter[employee_id][gt]=3</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><samp>sort</samp></td>
+                        <td>Сортирует коллекцию по заданному полю.</td>
+                        <td><code>http://meetings.test/v1/meetings?sort=date</code></td>
+                    </tr>
+                    <tr>
+                        <td><samp>fields</samp></td>
+                        <td>Скрывает из ресурсов все поля кроме заданных.<br>
+                            Поля перечисляются через запятую без пробелов.</td>
+                        <td><code>http://meetings.test/v1/employees?fields=name,title</code></td>
+                    </tr>
+                    <tr>
+                        <td><samp>expand</samp></td>
+                        <td>Добавляет в ресурсы поля, которые по умолчанию скрыты.</td>
+                        <td><code>http://meetings.test/v1/employees?expand=meetings</code><br>
+                            <code>http://meetings.test/v1/meetings?expand=employees</code>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h5 id="endpoints-employees">/employees</h5>
+        Позволяет выполнять CRUD-операции над сотрудниками, а также составлять расписания.<br>
+        Ресурс имеет скрытое поле <code>meetings</code>, которое можно добавить параметром <code>expand</code>.<br>
+        <br>
+        <samp><span class="tag tag--info">GET</span> /employees</samp> - вывод списка всех сотрудников.<br>
+        Пример ответа:
+        <pre><code><small>[<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;id&quot;: 1,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;name&quot;: &quot;Otto Hastie&quot;,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;title&quot;: &quot;Analog Circuit Design manager&quot;<br>&nbsp; &nbsp; },<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;id&quot;: 2,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;name&quot;: &quot;Cornelius Slyde&quot;,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;title&quot;: &quot;Teacher&quot;<br>&nbsp; &nbsp; },<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;id&quot;: 3,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;name&quot;: &quot;Vinny Pizzapasta&quot;,<br>&nbsp; &nbsp; &nbsp; &nbsp; &quot;title&quot;: &quot;VP Quality Control&quot;<br>&nbsp; &nbsp; }<br>]</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--info">GET</span> /employees/{id}</samp> - вывод сотрудника по <code>{id}</code>.<br>
+        Пример запроса: <code>http://meetings.test/v1/employees/4?expand=meetings</code><br>
+        Пример ответа:
+        <pre><code><small>{<br>    &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;Vinny Pizzapasta&quot;,
+        &quot;title&quot;: &quot;VP Quality Control&quot;,
+        &quot;meetings&quot;: [
+            {
+                &quot;id&quot;: 63,
+                &quot;date&quot;: &quot;2022-10-07&quot;,
+                &quot;start_time&quot;: &quot;01:00:00&quot;,
+                &quot;end_time&quot;: &quot;02:00:00&quot;,
+                &quot;topic&quot;: &quot;Commercial distribution&quot;
+            }
+        ]
+    }</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--success">POST</span> /employees</samp> - создание нового сотрудника.<br>
+        Пример тела запроса:
+        <pre><code><small>{<br>    &quot;name&quot;: &quot;Alexander Hamilton&quot;,
+        &quot;title&quot;: &quot;Secretary&quot;
+    }</small></code></pre><br>
+
+        <samp><span class="tag tag--warning">PATCH</span> /employees/{id}</samp> - обновление информации о сотруднике по
+        <code>{id}</code>.<br>
+        Пример тела запроса:
+        <pre><code><small>{<br>    &quot;title&quot;: &quot;Accountant&quot;
+    }</small></code></pre><br>
+
+        <samp><span class="tag tag--danger">DELETE</span> /employees/{id}</samp> - удаление сотрудника по
+        <code>{id}</code>.<br>
+        <br>
+
+        <samp><span class="tag tag--info">GET</span> /employees/{id}/build-schedule?date={date}</samp> - составление
+        расписания для
+        сотрудника по <code>{id}</code> в день <code>{date}</code>.<br>
+        Пример запроса: <code>http://meetings.test/v1/employees/4/build-schedule?date=2022-10-07</code><br>
+        Пример ответа:
+        <pre><code><small>[<br>    {
+            &quot;id&quot;: 63,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;01:00:00&quot;,
+            &quot;end_time&quot;: &quot;02:00:00&quot;,
+            &quot;topic&quot;: &quot;Commercial distribution&quot;
+        },
+        {
+            &quot;id&quot;: 64,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;02:00:00&quot;,
+            &quot;end_time&quot;: &quot;04:00:00&quot;,
+            &quot;topic&quot;: &quot;Money&quot;
+        },
+        {
+            &quot;id&quot;: 67,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;05:00:00&quot;,
+            &quot;end_time&quot;: &quot;06:00:00&quot;,
+            &quot;topic&quot;: &quot;Small talk&quot;
+        }
+    ]</small></code></pre>
+        <br>
+        <br>
+
+        <h5 id="endpoints-meetings">/meetings</h5>
+        Позволяет выполнять CRUD-операции над собраниями.<br>
+        Ресурс имеет скрытое поле <code>employees</code>, которое можно добавить параметром <code>expand</code>.<br>
+        <br>
+        <samp><span class="tag tag--info">GET</span> /meetings</samp> - вывод списка всех собраний.<br>
+        Пример ответа:
+        <pre><code><small>[<br>    {
+            &quot;id&quot;: 62,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;00:00:00&quot;,
+            &quot;end_time&quot;: &quot;04:00:00&quot;,
+            &quot;topic&quot;: &quot;Business business&quot;
+        },
+        {
+            &quot;id&quot;: 63,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;01:00:00&quot;,
+            &quot;end_time&quot;: &quot;02:00:00&quot;,
+            &quot;topic&quot;: &quot;Commercial distribution&quot;
+        },
+        {
+            &quot;id&quot;: 64,
+            &quot;date&quot;: &quot;2022-10-07&quot;,
+            &quot;start_time&quot;: &quot;02:00:00&quot;,
+            &quot;end_time&quot;: &quot;04:00:00&quot;,
+            &quot;topic&quot;: &quot;Money&quot;
+        }
+    ]</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--info">GET</span> /meetings/&ltid&gt</samp> - вывод собрания по
+        <code>{id}</code>.<br>
+        Пример запроса: <code>http://meetings.test/v1/meetings/69?expand=employees</code><br>
+        Пример ответа:
+        <pre><code><small>{<br>    &quot;id&quot;: 69,
+        &quot;date&quot;: &quot;2022-10-07&quot;,
+        &quot;start_time&quot;: &quot;06:00:00&quot;,
+        &quot;end_time&quot;: &quot;07:00:00&quot;,
+        &quot;topic&quot;: &quot;Rooter: A Methodology for the Typical Unification of Access Points and Redundancy&quot;,
+        &quot;employees&quot;: [
+            {
+                &quot;id&quot;: 4,
+                &quot;name&quot;: &quot;Leland Gaskell&quot;,
+                &quot;title&quot;: &quot;VP Quality Control&quot;
+            }
+        ]
+    }</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--success">POST</span> /meetings</samp> - создание нового собрания.<br>
+        Пример тела запроса:
+        <pre><code><small>{<br>    &quot;start_time&quot;: &quot;08:00&quot;,
+        &quot;end_time&quot;: &quot;10:00&quot;,
+        &quot;date&quot;: &quot;2022-10-07&quot;,
+        &quot;topic&quot;: &quot;Important attend ALL&quot;,
+        &quot;employees&quot;: [
+            {
+                &quot;id&quot;: 2
+            },
+            {
+                &quot;name&quot;: &quot;Babb Ferens&quot;
+            },
+            {
+                &quot;id&quot;: 4
+            }
+        ]
+    }</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--warning">PATCH</span> /meetings/&ltid&gt</samp> - обновление информации о собрании
+        по
+        <code>{id}</code>.<br>
+        Пример тела запроса:
+        <pre><code><small>{
+        &quot;date&quot;: &quot;2022-10-07&quot;,
+        &quot;topic&quot;: &quot;Not very important tbh&quot;
+    }</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--danger">DELETE</span> /meetings/&ltid&gt</samp> - удаление собрания по
+        <code>{id}</code>.<br>
+        <br>
+
+        <h5 id="endpoints-appointments">/appointments</h5>
+        Позволяет выполнять операции над связями между сотрудниками и собраниями.<br>
+
+        <samp><span class="tag tag--info">GET</span> /appointments</samp> - вывод списка всех связей.<br>
+        Пример ответа:
+        <pre><code><small>[<br>    {
+            &quot;meeting_id&quot;: 62,
+            &quot;employee_id&quot;: 4
+        },
+        {
+            &quot;meeting_id&quot;: 62,
+            &quot;employee_id&quot;: 6
+        },
+        {
+            &quot;meeting_id&quot;: 64,
+            &quot;employee_id&quot;: 4
+        }
+    ]</small></code></pre>
+        <br>
+
+        <samp><span class="tag tag--success">POST</span> /appointments</samp> - создание новой связи.<br>
+        Пример тела запроса:
+        <pre><code><small>{<br>    &quot;meeting_id&quot;: 21,
+        &quot;employee_id&quot;: 2
+    }</small></code></pre>
+        <br>
+        <hr>
+        <br>
+        Титов Анатолий 2022
