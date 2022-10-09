@@ -1,1 +1,1 @@
-:)
+Документация: https://teatov.github.io/meeting-schedule-service/
